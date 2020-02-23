@@ -10,10 +10,10 @@
 
 ### Todo
 
-- [] Aceitar mais de uma loja (Renner, Dafiti)
-- [] Aceitar o usuário setar o tamanho do desconto
-- [] Mandar pro usuário que mandou o `/start` no bot
-- [] Testes
+- [  ] Aceitar mais de uma loja (Renner, Dafiti)
+- [  ] Aceitar o usuário setar o tamanho do desconto
+- [  ] Mandar pro usuário que mandou o `/start` no bot
+- [  ] Testes
 
 ### Var env
 
