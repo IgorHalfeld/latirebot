@@ -2,7 +2,8 @@
   <img src="latire.png" width="150" />
   <h1 align="center">Latire</h1>
   <p align="center">
-    Um CRON feito em Golang que procura roupas masculinas na riachuelo e manda mensagem no telegram quando tem promoção
+    Um CRON feito em Golang que procura roupas masculinas na riachuelo <br />
+    e manda mensagem no telegram quando tem promoção
   </p>
 </p>
 
