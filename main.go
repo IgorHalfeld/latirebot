@@ -17,7 +17,11 @@ func main() {
 	scanHandler := handles.NewScanHandler(handles.Scan{
 		TelegramService:  services.NewTelegramService(),
 		RiachueloService: services.NewRiachueloService(),
+		RennerService:    services.NewRennerService(),
 	})
+
+	scanHandler.Look()
+
 	c.AddFunc("@daily", scanHandler.Look)
 
 	go c.Start()

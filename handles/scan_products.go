@@ -2,17 +2,19 @@ package handles
 
 import (
 	"fmt"
-	"strconv"
+	"log"
 	"strings"
+	"sync"
 
-	"github.com/igorhalfeld/latirebot/services"
+	"github.com/igorhalfeld/latirebot/interfaces"
 	"github.com/igorhalfeld/latirebot/structs"
 )
 
 // Scan looking for products
 type Scan struct {
-	RiachueloService *services.RiachueloService
-	TelegramService  *services.TelegramService
+	RiachueloService interfaces.IProductService
+	TelegramService  interfaces.IAlertService
+	RennerService    interfaces.IProductService
 }
 
 // NewScanHandler creates a new instance
@@ -22,35 +24,64 @@ func NewScanHandler(s Scan) *Scan {
 
 // Look starts looking for products
 func (s *Scan) Look() {
-	products, err := s.RiachueloService.GetProducts()
-	if err != nil {
-		fmt.Println(err)
+	var wg sync.WaitGroup
+
+	wg.Add(1)
+	go func() {
+		log.Println("Riachelo dispatched")
+		products, err := s.RiachueloService.GetProducts()
+		if err != nil {
+			log.Println(err)
+		}
+		s.comparePricesAndSendAlert(products)
+		wg.Done()
+	}()
+
+	wg.Add(1)
+	go func() {
+		log.Println("Renner dispatched")
+		products, err := s.RennerService.GetProducts()
+		if err != nil {
+			log.Println(err)
+		}
+		s.comparePricesAndSendAlert(products)
+		wg.Done()
+	}()
+
+	wg.Wait()
+}
+
+func (s *Scan) comparePricesAndSendAlert(products []structs.Product) {
+	var lastIndex int = 100
+	if len(products) < 100 {
+		lastIndex = len(products) - 1
 	}
 
-	for _, product := range products[0:100] {
-		cV, _ := strconv.ParseFloat(product.ChMaxPrice01, 64)
-		nV, _ := strconv.ParseFloat(product.MinPrice01, 64)
+	for _, product := range products[0:lastIndex] {
+		dP := product.DiscountPrice
+		nP := product.NormalPrice
 
-		if cV != 0 && cV < nV {
+		if dP != 0 && dP < nP {
 			s.TelegramService.Send(structs.SendPayload{
 				Name:      product.Name,
-				Caption:   buildCaption(product, cV, nV),
+				Provider:  product.Provider,
+				Caption:   s.buildCaption(product, dP, nP),
 				ChatID:    "158277392",
-				Photo:     product.SmallImage,
+				Photo:     product.Image,
 				ParseMode: "HTML",
 			})
 		}
 	}
 
-	fmt.Println("All sent!")
+	log.Println("All sent!")
 }
 
-func buildCaption(product structs.Product, cV float64, nV float64) string {
+func (s *Scan) buildCaption(product structs.Product, cV float64, nV float64) string {
 	var value float64 = cV
 
 	price := value / 1
 
-	return "<strong>" + strings.ToUpper(product.Name) + "</strong> ⚡️ " +
+	return "<strong>" + strings.ToUpper(product.Name) + "</strong> ⚡️ " + strings.ToUpper(product.Provider) + " ⚡️ " +
 		"<i>R$" + fmt.Sprintf("%.2f", price) + "</i> - <s>R$" + fmt.Sprintf("%.2f", nV) + "</s> ⚡️ " +
-		"<a href='https://www.riachuelo.com.br/" + product.URLKey + "'>Ver detalhes💵</a>"
+		"<a href='" + product.Link + "'>Ver detalhes 💵</a>"
 }

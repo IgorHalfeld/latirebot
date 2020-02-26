@@ -1,7 +1,6 @@
 package services
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -34,6 +33,6 @@ func (t *TelegramService) Send(p structs.SendPayload) {
 		log.Fatalln(err)
 	}
 
-	fmt.Println("Sent! ", p.Name)
+	log.Println("Sent! ", p.Provider, p.Name)
 	defer response.Body.Close()
 }
