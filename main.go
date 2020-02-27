@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"os"
 	"os/signal"
 
@@ -22,11 +22,14 @@ func main() {
 
 	scanHandler.Look()
 
+	log.Println("Telegram KEY", os.Getenv("TELEGRAM_KEY"))
+
 	c.AddFunc("@daily", scanHandler.Look)
+	scanHandler.Look()
 
 	go c.Start()
 
-	fmt.Println("Bot is alive 🚨")
+	log.Println("Bot is alive 🚨")
 
 	sig := make(chan os.Signal)
 	signal.Notify(sig, os.Interrupt, os.Kill)

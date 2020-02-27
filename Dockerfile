@@ -4,6 +4,7 @@ ADD . /usr/src/myapp
 
 WORKDIR /usr/src/myapp
 
-RUN go build main.go
+RUN go build -v main.go
+RUN mv main $GOPATH/bin
 
-CMD ['./main']
+ENTRYPOINT main
