@@ -3,6 +3,7 @@ package handles
 import (
 	"fmt"
 	"log"
+	"sort"
 	"strings"
 	"sync"
 
@@ -55,6 +56,8 @@ func (s *Scan) comparePricesAndSendAlert(products []structs.Product) {
 	var lastIndex int = 100
 	if len(products) < 100 {
 		lastIndex = len(products) - 1
+	} else {
+		products = sortDiscount(products) // In case recieved more than 100 products, guarantee to send the better discounts
 	}
 
 	for _, product := range products[0:lastIndex] {
@@ -74,6 +77,14 @@ func (s *Scan) comparePricesAndSendAlert(products []structs.Product) {
 	}
 
 	log.Println("All sent!")
+}
+
+func sortDiscount(products []structs.Product) []structs.Product {
+	sort.SliceStable(products, func(i, j int) bool {
+		return (products[i].NormalPrice / products[i].DiscountPrice) > (products[j].NormalPrice / products[j].DiscountPrice) // Less funciton reversed for one-shot reversing
+	})
+
+	return products
 }
 
 func (s *Scan) buildCaption(product structs.Product, cV float64, nV float64) string {
