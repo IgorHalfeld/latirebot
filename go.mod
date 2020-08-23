@@ -11,7 +11,9 @@ require (
 	github.com/gocolly/colly/v2 v2.0.1
 	github.com/golang/groupcache v0.0.0-20200121045136-8c9f03a8e57e // indirect
 	github.com/golang/protobuf v1.3.3 // indirect
-	github.com/mattn/go-sqlite3 v1.14.1
+	github.com/google/uuid v1.1.1
+	github.com/jmoiron/sqlx v1.2.0
+	github.com/mattn/go-sqlite3 v1.9.0
 	github.com/robfig/cron v1.2.0
 	github.com/robfig/cron/v3 v3.0.0
 	github.com/technoweenie/multipartstreamer v1.0.1 // indirect

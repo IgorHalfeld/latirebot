@@ -1,8 +1,14 @@
 package services
 
-import "github.com/igorhalfeld/latirebot/repositories"
+import (
+	"context"
+
+	"github.com/igorhalfeld/latirebot/repositories"
+	"github.com/igorhalfeld/latirebot/structs"
+)
 
 type UserInterface interface {
+	ReadAll(ctx context.Context) ([]structs.User, error)
 }
 
 type UserService struct {
@@ -10,5 +16,14 @@ type UserService struct {
 }
 
 func NewUserService(repos repositories.Container) *UserService {
-	return &UserService{}
+	return &UserService{repos}
+}
+
+func (us UserService) ReadAll(ctx context.Context) ([]structs.User, error) {
+	users, err := us.repos.UserRepository.ReadAll(ctx)
+	if err != nil {
+		return []structs.User{}, err
+	}
+
+	return users, nil
 }

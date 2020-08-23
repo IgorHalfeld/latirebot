@@ -7,8 +7,9 @@ import (
 )
 
 type UserInterface interface {
-	Create(context context.Context, ID string) error
-	ReadAll(context context.Context) ([]structs.Users, error)
+	Create(context context.Context, user structs.User) error
+	ReadOneByUsername(context context.Context) (structs.User, error)
+	ReadAll(context context.Context) ([]structs.User, error)
 }
 
 type Container struct {

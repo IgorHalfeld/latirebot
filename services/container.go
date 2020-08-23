@@ -6,13 +6,9 @@ type ProviderServiceInterface interface {
 	GetProducts() ([]structs.Product, error)
 }
 
-type AlertServiceInterface interface {
-	Send(p structs.SendPayload)
-}
-
 type Container struct {
 	UserService      UserInterface
 	RiachueloService ProviderServiceInterface
 	RennerService    ProviderServiceInterface
-	TelegramService  AlertServiceInterface
+	TelegramService  TelegramInterface
 }

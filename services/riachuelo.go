@@ -42,14 +42,14 @@ func (rs *RiachueloService) GetProducts() ([]structs.Product, error) {
 	var products []structs.Product
 
 	for _, product := range responseJSON {
-		nP, _ := strconv.ParseFloat(product.MinPrice01, 64)
-		dP, _ := strconv.ParseFloat(product.ChMaxPrice01, 64)
+		np, _ := strconv.ParseFloat(product.MinPrice01, 64)
+		dp, _ := strconv.ParseFloat(product.ChMaxPrice01, 64)
 
 		products = append(products, structs.Product{
 			Provider:      "Riachuelo",
 			Name:          product.Name,
-			NormalPrice:   nP,
-			DiscountPrice: dP,
+			NormalPrice:   np,
+			DiscountPrice: dp,
 			Link:          "https://www.riachuelo.com.br/" + product.URLKey,
 			Image:         product.SmallImage,
 		})

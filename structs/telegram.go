@@ -9,3 +9,11 @@ type SendPayload struct {
 	ChatID    string `json:"chat_id"`
 	ParseMode string `json:"parse_mode"`
 }
+
+type NotificationPayload struct {
+	User          User
+	Product       Product
+	Caption       string
+	NormalPrice   float64
+	DiscountPrice float64
+}
