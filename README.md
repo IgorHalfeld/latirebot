@@ -10,11 +10,11 @@
 
 ### Todo
 
-- [x] Aceitar mais de uma loja (Renner, Dafiti)
-- [x] Aceitar roupas femininas também (foi masculinas inicialmente pq é pra mim haha)
-- [] Aceitar o usuário setar o tamanho do desconto
-- [x] Mandar pro usuário que mandou o `/start` no bot
-- [] Testes
+[x] Aceitar mais de uma loja (Renner, Dafiti)
+[x] Aceitar roupas femininas também (foi masculinas inicialmente pq é pra mim haha)
+[] Aceitar o usuário setar o tamanho do desconto
+[x] Mandar pro usuário que mandou o `/start` no bot
+[] Testes
 
 ### Var env
 
