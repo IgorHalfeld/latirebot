@@ -10,20 +10,22 @@
 
 ### Todo
 
-- [  ] Aceitar mais de uma loja (Renner, Dafiti)
-- [  ] Aceitar roupas femininas também (foi masculinas inicialmente pq é pra mim haha)
+- [x] Aceitar mais de uma loja (Renner, Dafiti)
+- [x] Aceitar roupas femininas também (foi masculinas inicialmente pq é pra mim haha)
 - [  ] Aceitar o usuário setar o tamanho do desconto
-- [  ] Mandar pro usuário que mandou o `/start` no bot
+- [x] Mandar pro usuário que mandou o `/start` no bot
 - [  ] Testes
 
 ### Var env
 
-```
+```sh
 TELEGRAM_KEY=MY_KEY
 ```
 
 ### Como rodar 
 
-```
-go run main.go
+```sh
+make migration-up
+
+make run
 ```
