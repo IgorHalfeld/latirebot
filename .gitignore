@@ -1,2 +1,4 @@
 .terraform
+terraform.tf*
 latire.db
+plan.out
