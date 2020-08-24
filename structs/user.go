@@ -9,6 +9,7 @@ type ClothingEnum string
 const (
 	ClothingTypeMale   ClothingEnum = "MALE"
 	ClothingTypeFemale ClothingEnum = "FEMALE"
+	ClothingTypeBoth   ClothingEnum = "BOTH"
 )
 
 type User struct {

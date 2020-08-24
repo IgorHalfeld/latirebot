@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"sort"
 	"sync"
@@ -24,7 +25,7 @@ func (p Product) Look() {
 	ctx := context.Background()
 	users, _ := p.services.UserService.ReadAll(ctx)
 
-	log.Panicln("Total of users to be notified:", len(users))
+	log.Println("Total of users to be notified:", len(users))
 
 	for _, user := range users {
 		var wg sync.WaitGroup
@@ -32,7 +33,8 @@ func (p Product) Look() {
 		wg.Add(1)
 		go func() {
 			log.Println("Riachelo dispatched")
-			products, err := p.services.RiachueloService.GetProducts()
+			fmt.Println("ClothingType", user)
+			products, err := p.services.RiachueloService.GetProducts(user.ClothingType)
 			if err != nil {
 				log.Println(err)
 			}
@@ -43,7 +45,7 @@ func (p Product) Look() {
 		wg.Add(1)
 		go func() {
 			log.Println("Renner dispatched")
-			products, err := p.services.RennerService.GetProducts()
+			products, err := p.services.RennerService.GetProducts(user.ClothingType)
 			if err != nil {
 				log.Println(err)
 			}
@@ -79,7 +81,7 @@ func (p Product) comparePricesAndSendAlert(products []structs.Product, user stru
 
 func sortDiscount(products []structs.Product) []structs.Product {
 	sort.SliceStable(products, func(i, j int) bool {
-		// Less funciton reversed for one-shot reversing
+		// Less function reversed for one-shot reversing
 		return (products[i].NormalPrice / products[i].DiscountPrice) >
 			(products[j].NormalPrice / products[j].DiscountPrice)
 	})
