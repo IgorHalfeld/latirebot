@@ -1,6 +1,7 @@
 FROM golang:1.13.8-alpine3.11 
 
 ADD . /usr/src/myapp
+ADD ~/.env /usr/src/myapp
 
 WORKDIR /usr/src/myapp
 
