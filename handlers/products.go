@@ -3,7 +3,6 @@ package handlers
 import (
 	"context"
 	"log"
-	"sort"
 	"sync"
 
 	"github.com/igorhalfeld/latirebot/services"
@@ -95,6 +94,8 @@ func (p Product) comparePricesAndSendAlert(products []structs.Product, user stru
 	log.Println("All sent!")
 }
 
+// TODO: For get better product discount only
+/*
 func sortDiscount(products []structs.Product) []structs.Product {
 	sort.SliceStable(products, func(i, j int) bool {
 		// Less function reversed for one-shot reversing
@@ -104,3 +105,4 @@ func sortDiscount(products []structs.Product) []structs.Product {
 
 	return products
 }
+*/
