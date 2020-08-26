@@ -1,6 +1,5 @@
 package structs
 
-// SendPayload is body request for send messages
 type SendPayload struct {
 	Name      string
 	Provider  string

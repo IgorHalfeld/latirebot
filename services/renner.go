@@ -29,7 +29,7 @@ func (rs *RennerService) GetProducts(clothingType structs.ClothingEnum) ([]struc
 
 	for _, URL := range URLs {
 		c.OnHTML(".wrapper.cf.results-list.js-results-list", func(e *colly.HTMLElement) {
-			log.Println("Getting elements")
+			log.Println("[renner] Getting elements")
 
 			e.ForEach("div.item_product", func(_ int, children *colly.HTMLElement) {
 				var item structs.RennerCardItem
@@ -38,12 +38,14 @@ func (rs *RennerService) GetProducts(clothingType structs.ClothingEnum) ([]struc
 
 				product, err := rs.getProductDetail(item.ID)
 				if err != nil {
-					log.Fatalln("Error on get product detail")
+					log.Fatalln("[renner] Error on get product detail")
 				}
 
-				product.Image = "https:" + children.ChildAttr(".js-prod-link .js-images img", "src")
+				product.SKU = item.SkuID
+				product.ImageURL = "https:" + children.ChildAttr(".js-prod-link .js-images img", "src")
 				product.Provider = "Renner"
 				product.Link = "http:" + item.URL
+				product.ResponseData = children.Attr("data-product-gtm")
 
 				products = append(products, product)
 			})
@@ -60,7 +62,7 @@ func (rs *RennerService) getProductDetail(id string) (structs.Product, error) {
 
 	response, err := http.Get(URL)
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatalln("[renner]", err)
 		return structs.Product{}, err
 	}
 
@@ -68,7 +70,7 @@ func (rs *RennerService) getProductDetail(id string) (structs.Product, error) {
 
 	body, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatalln("[renner]", err)
 		return structs.Product{}, err
 	}
 

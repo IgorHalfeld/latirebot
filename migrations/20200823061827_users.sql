@@ -7,6 +7,7 @@ CREATE TABLE users (
 	username        TEXT NOT NULL UNIQUE,
 	clothing_type   TEXT NOT NULL,
   started_at      TEXT 
+  created_at      TEXT
 );
 
 -- +goose StatementEnd

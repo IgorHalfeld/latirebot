@@ -7,10 +7,6 @@ import (
 	"github.com/igorhalfeld/latirebot/structs"
 )
 
-type UserInterface interface {
-	ReadAll(ctx context.Context) ([]structs.User, error)
-}
-
 type UserService struct {
 	repos repositories.Container
 }

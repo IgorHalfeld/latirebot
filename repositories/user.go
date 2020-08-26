@@ -10,8 +10,8 @@ import (
 )
 
 var (
-	errorCreate  = errors.New("User create failed")
-	errorReadAll = errors.New("User readall failed")
+	errorUserCreate  = errors.New("User create failed")
+	errorUserReadAll = errors.New("User readall failed")
 )
 
 type UserRepository struct {
@@ -32,16 +32,16 @@ func (ur UserRepository) Create(ctx context.Context, user structs.User) error {
 	result, err := ur.db.ExecContext(ctx, query, user.ID, user.TelegramID, user.Name, user.Username, user.ClothingType, user.StartedAt)
 	if err != nil {
 		log.Println(err)
-		return errorCreate
+		return errorUserCreate
 	}
 
-	affectedRows, err := result.RowsAffected()
+	_, err = result.RowsAffected()
 	if err != nil {
-		log.Println(errorCreate, err)
-		return errorCreate
+		log.Println(errorUserCreate, err)
+		return errorUserCreate
 	}
-	log.Println("affected rows", affectedRows)
 
+	log.Println("user creating", user.ID)
 	return nil
 }
 
@@ -53,8 +53,8 @@ func (ur UserRepository) ReadAll(ctx context.Context) ([]structs.User, error) {
 
 	err := ur.db.SelectContext(ctx, &users, query)
 	if err != nil {
-		log.Fatalln(errorReadAll, err)
-		return []structs.User{}, errorReadAll
+		log.Fatalln(errorUserReadAll, err)
+		return []structs.User{}, errorUserReadAll
 	}
 
 	return users, nil

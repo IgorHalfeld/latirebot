@@ -25,8 +25,9 @@ func (rs RiachueloService) GetProducts(clothingType structs.ClothingEnum) ([]str
 
 	for _, URL := range URLs {
 		response, err := http.Get(URL)
+		log.Println("[riachuelo] Getting elements")
 		if err != nil {
-			log.Fatalln(err)
+			log.Fatalln("[riachuelo]", err)
 			return []structs.Product{}, err
 		}
 
@@ -34,7 +35,7 @@ func (rs RiachueloService) GetProducts(clothingType structs.ClothingEnum) ([]str
 
 		body, err := ioutil.ReadAll(response.Body)
 		if err != nil {
-			log.Fatalln(err)
+			log.Fatalln("[riachuelo]", err)
 			return []structs.Product{}, err
 		}
 
@@ -42,16 +43,19 @@ func (rs RiachueloService) GetProducts(clothingType structs.ClothingEnum) ([]str
 		json.Unmarshal(body, &responseJSON)
 
 		for _, product := range responseJSON {
+			responseData, _ := json.Marshal(product)
 			np, _ := strconv.ParseFloat(product.MinPrice01, 64)
 			dp, _ := strconv.ParseFloat(product.ChMaxPrice01, 64)
 
 			products = append(products, structs.Product{
-				Provider:      "Riachuelo",
+				SKU:           product.SKU,
 				Name:          product.Name,
 				NormalPrice:   np,
 				DiscountPrice: dp,
+				Provider:      "Riachuelo",
 				Link:          "https://www.riachuelo.com.br/" + product.URLKey,
-				Image:         product.SmallImage,
+				ImageURL:      product.SmallImage,
+				ResponseData:  string(responseData),
 			})
 		}
 	}

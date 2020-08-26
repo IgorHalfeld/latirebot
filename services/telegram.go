@@ -19,11 +19,6 @@ const (
 	bothClothing   string = "Ambas"
 )
 
-type TelegramInterface interface {
-	ListenMessages()
-	SendNotification(payload structs.NotificationPayload)
-}
-
 type TelegramService struct {
 	repos repositories.Container
 	bot   *tgbotapi.BotAPI
@@ -94,11 +89,11 @@ func (ts TelegramService) SendNotification(payload structs.NotificationPayload) 
 	np := payload.NormalPrice
 	dp := payload.DiscountPrice
 
-	text := `<strong>` + strings.ToUpper(product.Name) + `</strong> ⚡️ ` + strings.ToUpper(product.Provider) + ` ⚡️ ` +
+	text := `<strong>` + strings.ToUpper(product.Name) + `</strong> ⚡️ ` + strings.ToUpper(string(product.Provider)) + ` ⚡️ ` +
 		`<i>R$` + fmt.Sprintf("%.2f", dp) + `</i> - <s>R$` + fmt.Sprintf("%.2f", np) + `</s> ⚡️ ` +
 		`<a href='` + product.Link + `'>Ver detalhes 💵</a>`
 
-	msg := tgbotapi.NewPhotoShare(user.TelegramID, product.Image)
+	msg := tgbotapi.NewPhotoShare(user.TelegramID, product.ImageURL)
 	msg.ParseMode = "html"
 	msg.Caption = text
 	msg.ReplyMarkup = tgbotapi.PhotoConfig{

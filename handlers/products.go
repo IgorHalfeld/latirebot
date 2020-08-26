@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"sort"
 	"sync"
@@ -24,47 +23,64 @@ func NewProductHandler(services services.Container) *Product {
 func (p Product) Look() {
 	ctx := context.Background()
 	users, _ := p.services.UserService.ReadAll(ctx)
-
 	log.Println("Total of users to be notified:", len(users))
 
+	chUsers := make(chan structs.User, 1)
+	go p.Dispatch(chUsers)
+
 	for _, user := range users {
-		var wg sync.WaitGroup
+		chUsers <- user
+	}
 
-		wg.Add(1)
-		go func() {
-			log.Println("Riachelo dispatched")
-			fmt.Println("ClothingType", user)
-			products, err := p.services.RiachueloService.GetProducts(user.ClothingType)
-			if err != nil {
-				log.Println(err)
-			}
-			p.comparePricesAndSendAlert(products, user)
-			wg.Done()
-		}()
+	close(chUsers)
+}
 
-		wg.Add(1)
-		go func() {
-			log.Println("Renner dispatched")
-			products, err := p.services.RennerService.GetProducts(user.ClothingType)
-			if err != nil {
-				log.Println(err)
-			}
-			p.comparePricesAndSendAlert(products, user)
-			wg.Done()
-		}()
+func (p Product) Dispatch(chUsers chan structs.User) {
+	select {
+	case user, ok := <-chUsers:
+		if ok {
+			var wg sync.WaitGroup
 
-		wg.Wait()
+			wg.Add(1)
+			go func() {
+				log.Println("Riachelo dispatched")
+				products, err := p.services.RiachueloService.GetProducts(user.ClothingType)
+				if err != nil {
+					log.Println(err)
+				}
+				p.comparePricesAndSendAlert(products, user)
+				wg.Done()
+			}()
+
+			wg.Add(1)
+			go func() {
+				log.Println("Renner dispatched")
+				products, err := p.services.RennerService.GetProducts(user.ClothingType)
+				if err != nil {
+					log.Println(err)
+				}
+				p.comparePricesAndSendAlert(products, user)
+				wg.Done()
+			}()
+
+			wg.Wait()
+		}
+	default:
 	}
 }
 
 func (p Product) comparePricesAndSendAlert(products []structs.Product, user structs.User) {
 	var lastIndex int = 10
-	// Guarantee to send the better discounts
-	products = sortDiscount(products)
 
 	for _, product := range products[0:lastIndex] {
 
+		// create product without blocking
+		go func() {
+			_ = p.services.ProductService.Create(context.Background(), product)
+		}()
+
 		if product.DiscountPrice != 0 && product.DiscountPrice < product.NormalPrice {
+
 			payload := structs.NotificationPayload{
 				Product:       product,
 				User:          user,

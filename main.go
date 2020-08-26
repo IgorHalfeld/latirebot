@@ -25,7 +25,8 @@ func createDatabaseConnection() (*sqlx.DB, error) {
 
 func createRepositoryContainer(db *sqlx.DB) repositories.Container {
 	return repositories.Container{
-		UserRepository: repositories.NewUserRepository(db),
+		UserRepository:    repositories.NewUserRepository(db),
+		ProductRepository: repositories.NewProductRepository(db),
 	}
 }
 
@@ -39,6 +40,7 @@ func createServiceContainer(repos repositories.Container) services.Container {
 		RennerService:    services.NewRennerService(),
 		RiachueloService: services.NewRiachueloService(),
 		UserService:      services.NewUserService(repos),
+		ProductService:   services.NewProductService(repos),
 		TelegramService:  services.NewTelegramService(repos, telegramKey),
 	}
 }

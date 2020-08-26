@@ -12,6 +12,11 @@ type UserInterface interface {
 	ReadAll(context context.Context) ([]structs.User, error)
 }
 
+type ProductInterface interface {
+	Create(context context.Context, product structs.Product) error
+}
+
 type Container struct {
-	UserRepository UserInterface
+	UserRepository    UserInterface
+	ProductRepository ProductInterface
 }

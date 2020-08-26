@@ -10,6 +10,7 @@ type RiachueloResponse struct {
 	MinPrice01     string    `json:"min_price_0_1"`
 	SmallImage     string    `json:"small_image"`
 	ActivationDate time.Time `json:"activation_date"`
+	SKU            string    `json:"sku"`
 	MaxPrice01     string    `json:"max_price_0_1"`
 	Marca          string    `json:"marca"`
 	CorSimples     []struct {
@@ -33,5 +34,5 @@ type RennerResponse struct {
 type RennerCardItem struct {
 	URL   string `json:"url"`
 	ID    string `json:"id"`
-	SkuID string `json:"skuId"`
+	SkuID string `json:"sku"`
 }
