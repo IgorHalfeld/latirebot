@@ -66,7 +66,7 @@ func main() {
 	handlers.ProductsHandler.Look()
 
 	http.HandleFunc("/", handlers.HealthHandler.Check)
-	c.AddFunc("@every 1min", handlers.ProductsHandler.Look)
+	c.AddFunc("@every 30s", handlers.ProductsHandler.Look)
 
 	go c.Start()
 	go services.TelegramService.ListenMessages()

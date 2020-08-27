@@ -18,5 +18,6 @@ type User struct {
 	Name         string       `db:"name"`
 	Username     string       `db:"username"`
 	StartedAt    string       `db:"started_at"`
+	CreatedAt    string       `db:"created_at"`
 	ClothingType ClothingEnum `db:"clothing_type"`
 }
