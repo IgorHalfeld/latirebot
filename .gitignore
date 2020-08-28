@@ -1,4 +1,5 @@
 .terraform
 terraform.tf*
-latire.db
+latire-production.db
+latire-development.db
 plan.out

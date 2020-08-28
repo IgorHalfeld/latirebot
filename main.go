@@ -15,7 +15,8 @@ import (
 )
 
 func createDatabaseConnection() (*sqlx.DB, error) {
-	db, err := sqlx.Open("sqlite3", "./latire.db")
+	env := os.Getenv("APP_ENV")
+	db, err := sqlx.Open("sqlite3", "./latire-"+env+".db")
 	if err != nil {
 		return nil, err
 	}
